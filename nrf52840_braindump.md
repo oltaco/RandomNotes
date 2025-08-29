@@ -75,7 +75,7 @@ Use bin2hex.py:
 ``bin2hex.py --offset ZZZZZZ infile.bin outfile.hex``
 
 Examples:  
-// Convert entire flashdump.bin to hex. This is a good start for working with your flash dump.
+// Convert entire flashdump.bin to hex. This is a good start for working with your flash dump.  
 ``bin2hex.py --offset 0x0 flashdump.bin flashdump.hex``  
 
 ---
