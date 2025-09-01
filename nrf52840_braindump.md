@@ -2,16 +2,16 @@
 
 ## Flashing your NRF52840 based device
 There's a few options for flashing:  
-- Use UF2 mode and copy a UF2 file onto the drive that is presented
+- Use UF2 mode and copy a UF2 file onto the drive that is presented. Recommended!
 - Use serial DFU mode (over USB connection) with a zip file and the adafruit-nrfutil program
 - Use OTA DFU mode with a zip file and an app on your phone (DFU/nRF Connect/etc)
 - Use a SWD or J-Link device and associated software (OpenOCD/pyocd/etc)
 
 ### UF2 DFU mode
-This is the most straightforward option, generally you only need to double-press the reset button within 0.5 seconds and the device will show up in your computer as a disk drive. Then you copy a UF2 file to the drive to flash it. You can flash firmware or bootloader this way, but not SoftDevice afaik.
+This is the recommended option, as it is the safest and most straightforward. Generally you only need to double-press the reset button within 0.5 seconds and the device will show up in your computer as a disk drive. Then you copy a UF2 file to the drive to flash it. You can flash firmware or bootloader this way, but not SoftDevice afaik.
 
 ### Serial DFU mode
-This one is pretty simple as well, you just need to know what serial port the device is on and then you can run the following:<br>
+This one is pretty simple as well, you just need to know what serial port the device is on and then you can run the following:  
 ``adafruit-nrfutil dfu serial -sb -t 1200 -p PORTNUM -pkg package-to-flash.zip``  
 e.g. ``adafruit-nrfutil dfu serial -sb -t 1200 -p COM46 -pkg TrackerL1-bootloader.zip``  
 
@@ -87,6 +87,7 @@ Coming soon if I can be bothered.
 ---
 
 ### Some useful hex files and where to find them in the Adafruit nRF52 Bootloader source tree.
+These files are useful if you're handcrafting a hex file based on a dump. For example for recreating a bootloader zip package from a dump.
 
 lib/softdevice/mbr/hex/mbr_nrf52_2.4.1_mbr.hex  
 lib/softdevice/s140_nrf52_7.3.0/s140_nrf52_7.3.0_softdevice.hex  // softdevice includes the MBR  
