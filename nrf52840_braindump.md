@@ -105,6 +105,9 @@ lib/softdevice/s140_nrf52_6.1.1/s140_nrf52_6.1.1_softdevice.hex  // softdevice i
 0xFD800 - Bootloader settings  
 0xFE000 - MBR params (not used by adafruit bootloader?)  
 
+0xFD824 - 0xFD827 - USB VID and HWID in bootloader settings. Used in UF2 mode 
+0xF8918 - 0xF891B - USB VID and HWID (67 16 86 28 = VID2886 HWID 1667)
+
 Offsets starting at 0x10001000 refer to the UICR registers (User Information Configuration Registers). These can be set when flashing via a debugger with a hex file, or directly using debugger commands, or some (all?) can also be set by a zip package (bootloader package only?) when flashing using adafruit-nrfutil.
 
 Some examples of UICR offsets  
@@ -117,7 +120,7 @@ Some examples of UICR offsets
 
 ### Fixing UICR.REGOUT0
 
-If you do certain types of erase (mass erase or chip erase maybe?) you can end up with an unbootable device due to wiping the UICR.REGOUT0 register which is used to set the output voltage of the on-chip voltage regulator. Flashing a bootloader doesn't usually set this register, although it's worth looking into whether this might be possible to include in firmware.zip packages.
+If you do certain types of erase (mass erase or chip erase maybe?) you can end up with an unbootable device due to wiping the UICR.REGOUT0 register which is used to set the output voltage of the on-chip voltage regulator. It is also possible to set this register with a bootloader zip package, and you can compile the Adafruit NRF52 bootloader to do this by adding ``#define UICR_REGOUT0_VALUE UICR_REGOUT0_VOUT_3V3`` to your board.h file.
 
 To set UICR.REGOUT0 voltage to 3.3v:  
 Using pyocd and gdb:  
