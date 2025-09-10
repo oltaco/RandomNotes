@@ -118,6 +118,39 @@ Some examples of UICR offsets
 
 ---
 
+### Notes on SoftDevice RAM requirements
+SoftDevice RAM requirements will be different depending on what BLE settings you use (and maybe some other things? not certain).   
+If for example you add a bunch of extra BLE characteristics to your app you might find that the SoftDevice RAM requirements increase, possibly to the point where you might need to change the application RAM start offset in your linker files.
+
+The linker files included with the Adafruit NRF52 framework are already quite conservative, setting application base RAM address as 0x20006000 which leaves 235520 bytes for application RAM.  
+``0x20040000 - 0x20006000 = 3A000 = 237568 bytes``  
+``237568 - 2048 bytes reserved for the stack = 235520 bytes``
+
+You can find out exactly what the SoftDevice RAM requirements are for your application by setting ``-D CFG_DEBUG=1`` and ``-D CFG_DEBUG_BLE=1`` and checking the debug output for these lines about RAM requirements and SoftDevice config:
+```
+[CFG   ] SoftDevice's RAM requires: 0x20005130
+--------- SoftDevice Config ---------
+Max UUID128     : 10
+ATTR Table Size : 4096
+Service Changed : 1
+Peripheral Connect Setting
+  - Max MTU         : 250
+  - Event Length    : 2
+  - HVN Queue Size  : 16
+  - WrCmd Queue Size: 16
+```
+
+``0x20005130`` is the end offset of the SoftDevice's RAM requirements.  
+``0x20000000`` is the start offset for RAM addressing on nRF52840.  
+``0x20005130 - 0x20000000 = 20784 in decimal`` which is how much RAM the SoftDevice will need with the config you are using.  
+
+
+The list at the following link has some *minimum* RAM requirements but is not exhaustive, notably S140 v7.3.0 is missing. 
+
+https://devzone.nordicsemi.com/guides/short-range-guides/b/getting-started/posts/adjustment-of-ram-and-flash-memory
+
+---
+
 ### Fixing UICR.REGOUT0
 
 If you do certain types of erase (mass erase or chip erase maybe?) you can end up with an unbootable device due to wiping the UICR.REGOUT0 register which is used to set the output voltage of the on-chip voltage regulator. It is also possible to set this register with a bootloader zip package, and you can compile the Adafruit NRF52 bootloader to do this by adding ``#define UICR_REGOUT0_VALUE UICR_REGOUT0_VOUT_3V3`` to your board.h file.
